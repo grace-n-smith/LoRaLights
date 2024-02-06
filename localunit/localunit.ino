@@ -271,26 +271,13 @@ void loop()
         digitalWrite(SWITCH10, LOW);
       }
       
-    }
-    else
-    {
+    } else {
       //Serial.println("Receive failed");
     }
 
-
     // Sending back
-    int reply = UNIT_ID
-    if (reading == HIGH) {
-        reply = reply + 128
-    }
-    //Serial.println("Sending...");
-    delay(10);
+    int reply = reading == HIGH ? 1 : 0;
     rf95.send(reply);
- 
-    //Serial.println("Waiting for packet to complete..."); 
-    delay(10);
     rf95.waitPacketSent();
-
-
   }
 }
