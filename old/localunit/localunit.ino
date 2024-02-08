@@ -39,14 +39,10 @@
   #define RFM95_CS      10   // "B"
   #define RFM95_INT     4    // "C"
 #endif
- 
-// Identify Local Unit
-#define UNIT_ID 0
-// can be anywhere from 0-10
 
 // initializes the switch state
-int inPin = 1;         // the number of the input pin
-int outPin = 5;       // the number of the output pin, DEPENDENT ON ID
+int buttonPin = 4;         // the number of the input pin
+int myPinID = 5;       // the number of the output pin, DEPENDENT ON ID
 
 int state = LOW;      // the current state of the output pin
 int reading;           // the current reading from the input pin
@@ -63,7 +59,7 @@ unsigned long debounce = 200UL;   // the debounce time, increase if the output f
  
 // Singleton instance of the radio driver
 RH_RF95 rf95(RFM95_CS, RFM95_INT);
- 
+
 // Blinky on receipt
 #define LED 13
 
@@ -86,9 +82,15 @@ char switchArray[NUM_UNITS] = "";
 
 void setup()
 {
+  Serial.begin(9600);
+  while (!Serial); // Wait for serial port to be available
+  delay(100);
+
+  Serial.println("Starting...");
+
   pinMode(LED, OUTPUT);
-  pinMode(RFM95_RST, OUTPUT);
-  digitalWrite(RFM95_RST, HIGH);
+  // pinMode(RFM95_RST, OUTPUT);
+  // digitalWrite(RFM95_RST, HIGH);
 
   pinMode(TRUNK, OUTPUT);
   pinMode(DESTINY, OUTPUT);
@@ -101,43 +103,34 @@ void setup()
   pinMode(BMF, OUTPUT);
   pinMode(PECKER, OUTPUT);
   pinMode(ROOFDECK, OUTPUT);
-  pinMode(inPin,  INPUT);
-  pinMode(outPin, OUTPUT);
- 
-  //Serial.begin(115200);
-  //while (!Serial) {
-  //  delay(1);
-  //}
+  pinMode(buttonPin, INPUT_PULLUP);
+
   delay(100);
- 
-  //Serial.println("Feather LoRa RX Test!");
- 
+
   // manual reset
-  digitalWrite(RFM95_RST, LOW);
-  delay(10);
-  digitalWrite(RFM95_RST, HIGH);
-  delay(10);
+  // digitalWrite(RFM95_RST, LOW);
+  // delay(10);
+  // digitalWrite(RFM95_RST, HIGH);
+  // delay(10);
  
-  while (!rf95.init()) {
-    //Serial.println("LoRa radio init failed");
-    //Serial.println("Uncomment '#define SERIAL_DEBUG' in RH_RF95.cpp for detailed debug info");
-    while (1);
-  }
-  //Serial.println("LoRa radio init OK!");
- 
-  // Defaults after init are 434.0MHz, modulation GFSK_Rb250Fd250, +13dbM
-  if (!rf95.setFrequency(RF95_FREQ)) {
-    //Serial.println("setFrequency failed");
-    while (1);
-  }
-  //Serial.print("Set Freq to: "); Serial.println(RF95_FREQ);
+  // while (!rf95.init()) {
+  //   Serial.println("RF95 failed to init");
+  //   while (1);
+  // }
+
+  // if (!rf95.setFrequency(RF95_FREQ)) {
+  //   Serial.println("setFrequency failed");
+  //   while (1);
+  // }
  
   // Defaults after init are 434.0MHz, 13dBm, Bw = 125 kHz, Cr = 4/5, Sf = 128chips/symbol, CRC on
  
   // The default transmitter power is 13dBm, using PA_BOOST.
   // If you are using RFM95/96/97/98 modules which uses the PA_BOOST transmitter pin, then
   // you can set transmitter powers from 5 to 23 dBm:
-  rf95.setTxPower(23, false);
+  // rf95.setTxPower(23, false);
+  Serial.println("Blinking");
+
   digitalWrite(TRUNK, HIGH);
   digitalWrite(DESTINY, HIGH);
   digitalWrite(LOOPF, HIGH);
@@ -150,41 +143,59 @@ void setup()
   digitalWrite(PECKER, HIGH);
   digitalWrite(ROOFDECK, HIGH);
   delay(1000);
-  digitalWrite(TRUNK, LOW);
-  digitalWrite(DESTINY, LOW);
-  digitalWrite(LOOPF, LOW);
-  digitalWrite(CLAM, LOW);
-  digitalWrite(BONFIRE, LOW);
-  digitalWrite(AIW, LOW);
-  digitalWrite(FOO, LOW);
-  digitalWrite(BLACKHOLE, LOW);
-  digitalWrite(BMF, LOW);
-  digitalWrite(PECKER, LOW);
-  digitalWrite(ROOFDECK, LOW);
-  delay(1000);
+  // digitalWrite(TRUNK, LOW);
+  // digitalWrite(DESTINY, LOW);
+  // digitalWrite(LOOPF, LOW);
+  // digitalWrite(CLAM, LOW);
+  // digitalWrite(BONFIRE, LOW);
+  // digitalWrite(AIW, LOW);
+  // digitalWrite(FOO, LOW);
+  // digitalWrite(BLACKHOLE, LOW);
+  // digitalWrite(BMF, LOW);
+  // digitalWrite(PECKER, LOW);
+  // digitalWrite(ROOFDECK, LOW);
+  // delay(1000);
+
+  Serial.println("Blunk");
 }
  
 void loop()
 {
+  digitalWrite(TRUNK, HIGH);
+  digitalWrite(DESTINY, HIGH);
+  digitalWrite(LOOPF, HIGH);
+  digitalWrite(CLAM, HIGH);
+  digitalWrite(BONFIRE, HIGH);
+  digitalWrite(AIW, HIGH);
+  digitalWrite(FOO, HIGH);
+  digitalWrite(BLACKHOLE, HIGH);
+  digitalWrite(BMF, HIGH);
+  digitalWrite(PECKER, HIGH);
+  digitalWrite(ROOFDECK, HIGH);
 
-    reading = digitalRead(inPin);
+  return;
+  
+  reading = digitalRead(buttonPin);
 
   // if the input just went from LOW and HIGH and we've waited long enough
   // to ignore any noise on the circuit, toggle the output pin and remember
   // the time
   if (reading == HIGH && previous == LOW && millis() - time > debounce)
   {
-    if (state == HIGH)
+    if (state == HIGH) {
       state = LOW;
-    else
+      Serial.println("Toggled state off");
+    } else {
       state = HIGH;
+      Serial.println("Toggled state on");
+    }
 
     time = millis();
   }
-
-  digitalWrite(outPin, state);
-
+  digitalWrite(myPinID, state);
   previous = reading;
+  return;
+
   if (rf95.available())
   {
     // Should be a message for us now
@@ -276,8 +287,8 @@ void loop()
     }
 
     // Sending back
-    int reply = reading == HIGH ? 1 : 0;
-    rf95.send(reply);
+    uint8_t reply = reading == HIGH ? 1 : 0;
+    rf95.send(&reply, 1);
     rf95.waitPacketSent();
   }
 }

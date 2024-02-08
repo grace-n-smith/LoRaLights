@@ -57,8 +57,8 @@ bool buttonPressed() {
 }
 
 int FLOOR_STATES = 0;
-int OWN_PLACE_VALUE = 512;
-int OWN_LED_STATE = 0;
+int OWN_PLACE_VALUE = 1 << 9;
+uint8_t OWN_LED_STATE = 0;
 void updateState(int update) {
   FLOOR_STATES = update | (OWN_LED_STATE != 0 ? OWN_PLACE_VALUE : 0);
 }
@@ -116,6 +116,12 @@ void setup()
 
 void loop()
 {
+  // toggle state if button press detected
+  if (buttonPressed()) {
+    OWN_LED_STATE = 1 - OWN_LED_STATE;
+    updateState(FLOOR_STATES);
+  }
+
   if (rf95.available())
   {
     // Should be a message for us now   
@@ -134,12 +140,15 @@ void loop()
       Serial.println(recvStates);
       Serial.print("RSSI: ");
       Serial.println(rf95.lastRssi(), DEC);
-      
-      // Send a reply
-      uint8_t data[] = "And hello back to you";
-      rf95.send(data, sizeof(data));
-      rf95.waitPacketSent();
-      Serial.println("Sent a reply");
+
+      if (recvId == OWN_PLACE_VALUE) {
+        updateState(recvStates);
+        // Send a reply
+        uint8_t data[] = { (FLOOR_STATES & 0xFF00) >> 8, FLOOR_STATES & 0xFF, OWN_LED_STATE };
+        rf95.send(data, sizeof(data));
+        rf95.waitPacketSent();
+        Serial.println("Sent a reply");
+      }
     }
     else
     {

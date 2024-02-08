@@ -37,10 +37,9 @@
 // Singleton instance of the radio driver
 RH_RF95 rf95(RFM95_CS, RFM95_INT);
 
-
-#define NUM_UNITS 11
-#define PER_UNIT_DELAY 200
-#define TIMEOUT_DELAY 500
+const int NUM_UNITS = 11;
+const int PER_UNIT_DELAY = 200;
+const int TIMEOUT_DELAY = 500;
 
 uint8_t currentState[NUM_UNITS + 1];
 
