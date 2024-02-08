@@ -1,0 +1,7 @@
+{
+    "port": "/dev/tty.usbserial-AQ01LJS3",
+    "configuration": "cpu=atmega328",
+    "board": "arduino:avr:nano",
+    "sketch": "localunit/localunit.ino",
+    "programmer": "avrisp"
+}

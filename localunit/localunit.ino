@@ -46,7 +46,7 @@
 
 // initializes the switch state
 int inPin = 1;         // the number of the input pin
-int outPin = 13;       // the number of the output pin, DEPENDENT ON ID
+int outPin = 5;       // the number of the output pin, DEPENDENT ON ID
 
 int state = LOW;      // the current state of the output pin
 int reading;           // the current reading from the input pin
@@ -72,17 +72,17 @@ RH_RF95 rf95(RFM95_CS, RFM95_INT);
 char switchArray[NUM_UNITS] = "";
 
 //switches
-uint8_t SWITCH0 = 4;
-uint8_t SWITCH1 = 5;
-uint8_t SWITCH2 = 6;
-uint8_t SWITCH3 = 7;
-uint8_t SWITCH4 = 8;
-uint8_t SWITCH5 = 9;
-uint8_t SWITCH6 = 5;
-uint8_t SWITCH7 = 6;
-uint8_t SWITCH8 = 9;
-uint8_t SWITCH9 = 10;
-uint8_t SWITCH10 = 11;
+#define TRUNK 5
+#define DESTINY 6
+#define LOOPF 7
+#define CLAM 8
+#define BONFIRE 9
+#define AIW A7
+#define FOO A6
+#define BLACKHOLE A5
+#define BMF A4
+#define PECKER A3
+#define ROOFDECK A2
 
 void setup()
 {
@@ -90,17 +90,17 @@ void setup()
   pinMode(RFM95_RST, OUTPUT);
   digitalWrite(RFM95_RST, HIGH);
 
-  pinMode(SWITCH0, OUTPUT);
-  pinMode(SWITCH1, OUTPUT);
-  pinMode(SWITCH2, OUTPUT);
-  pinMode(SWITCH3, OUTPUT);
-  pinMode(SWITCH4, OUTPUT);
-  pinMode(SWITCH5, OUTPUT);
-  pinMode(SWITCH6, OUTPUT);
-  pinMode(SWITCH7, OUTPUT);
-  pinMode(SWITCH8, OUTPUT);
-  pinMode(SWITCH9, OUTPUT);
-  pinMode(SWITCH10, OUTPUT);
+  pinMode(TRUNK, OUTPUT);
+  pinMode(DESTINY, OUTPUT);
+  pinMode(LOOPF, OUTPUT);
+  pinMode(CLAM, OUTPUT);
+  pinMode(BONFIRE, OUTPUT);
+  pinMode(AIW, OUTPUT);
+  pinMode(FOO, OUTPUT);
+  pinMode(BLACKHOLE, OUTPUT);
+  pinMode(BMF, OUTPUT);
+  pinMode(PECKER, OUTPUT);
+  pinMode(ROOFDECK, OUTPUT);
   pinMode(inPin,  INPUT);
   pinMode(outPin, OUTPUT);
  
@@ -138,29 +138,29 @@ void setup()
   // If you are using RFM95/96/97/98 modules which uses the PA_BOOST transmitter pin, then
   // you can set transmitter powers from 5 to 23 dBm:
   rf95.setTxPower(23, false);
-  digitalWrite(SWITCH0, HIGH);
-  digitalWrite(SWITCH1, HIGH);
-  digitalWrite(SWITCH2, HIGH);
-  digitalWrite(SWITCH3, HIGH);
-  digitalWrite(SWITCH4, HIGH);
-  digitalWrite(SWITCH5, HIGH);
-  digitalWrite(SWITCH6, HIGH);
-  digitalWrite(SWITCH7, HIGH);
-  digitalWrite(SWITCH8, HIGH);
-  digitalWrite(SWITCH9, HIGH);
-  digitalWrite(SWITCH10, HIGH);
+  digitalWrite(TRUNK, HIGH);
+  digitalWrite(DESTINY, HIGH);
+  digitalWrite(LOOPF, HIGH);
+  digitalWrite(CLAM, HIGH);
+  digitalWrite(BONFIRE, HIGH);
+  digitalWrite(AIW, HIGH);
+  digitalWrite(FOO, HIGH);
+  digitalWrite(BLACKHOLE, HIGH);
+  digitalWrite(BMF, HIGH);
+  digitalWrite(PECKER, HIGH);
+  digitalWrite(ROOFDECK, HIGH);
   delay(1000);
-  digitalWrite(SWITCH0, LOW);
-  digitalWrite(SWITCH1, LOW);
-  digitalWrite(SWITCH2, LOW);
-  digitalWrite(SWITCH3, LOW);
-  digitalWrite(SWITCH4, LOW);
-  digitalWrite(SWITCH5, LOW);
-  digitalWrite(SWITCH6, LOW);
-  digitalWrite(SWITCH7, LOW);
-  digitalWrite(SWITCH8, LOW);
-  digitalWrite(SWITCH9, LOW);
-  digitalWrite(SWITCH10, LOW);
+  digitalWrite(TRUNK, LOW);
+  digitalWrite(DESTINY, LOW);
+  digitalWrite(LOOPF, LOW);
+  digitalWrite(CLAM, LOW);
+  digitalWrite(BONFIRE, LOW);
+  digitalWrite(AIW, LOW);
+  digitalWrite(FOO, LOW);
+  digitalWrite(BLACKHOLE, LOW);
+  digitalWrite(BMF, LOW);
+  digitalWrite(PECKER, LOW);
+  digitalWrite(ROOFDECK, LOW);
   delay(1000);
 }
  
@@ -216,59 +216,59 @@ void loop()
       //sprintf(switchArray, "%s" , (char*)buf);
 
       if (switchArray[0] == '0') {
-        digitalWrite(SWITCH0, HIGH);
+        digitalWrite(TRUNK, HIGH);
       } else {
-        digitalWrite(SWITCH0, LOW);
+        digitalWrite(TRUNK, LOW);
       }
       if (switchArray[1] == '0') {
-        digitalWrite(SWITCH1, HIGH);
+        digitalWrite(DESTINY, HIGH);
       } else {
-        digitalWrite(SWITCH1, LOW);
+        digitalWrite(DESTINY, LOW);
       }
       if (switchArray[2] == '0') {
-        digitalWrite(SWITCH2, HIGH);
+        digitalWrite(LOOPF, HIGH);
       } else {
-        digitalWrite(SWITCH2, LOW);
+        digitalWrite(LOOPF, LOW);
       }
       if (switchArray[3] == '0') {
-        digitalWrite(SWITCH3, HIGH);
+        digitalWrite(CLAM, HIGH);
       } else {
-        digitalWrite(SWITCH3, LOW);
+        digitalWrite(CLAM, LOW);
       }
       if (switchArray[4] == '0') {
-        digitalWrite(SWITCH4, HIGH);
+        digitalWrite(BONFIRE, HIGH);
       } else {
-        digitalWrite(SWITCH4, LOW);
+        digitalWrite(BONFIRE, LOW);
       }
       if (switchArray[5] == '0') {
-        digitalWrite(SWITCH5, HIGH);
+        digitalWrite(AIW, HIGH);
       } else {
-        digitalWrite(SWITCH5, LOW);
+        digitalWrite(AIW, LOW);
       }
       if (switchArray[6] == '0') {
-        digitalWrite(SWITCH6, HIGH);
+        digitalWrite(FOO, HIGH);
       } else {
-        digitalWrite(SWITCH6, LOW);
+        digitalWrite(FOO, LOW);
       }
       if (switchArray[7] == '0') {
-        digitalWrite(SWITCH7, HIGH);
+        digitalWrite(BLACKHOLE, HIGH);
       } else {
-        digitalWrite(SWITCH7, LOW);
+        digitalWrite(BLACKHOLE, LOW);
       }
       if (switchArray[8] == '0') {
-        digitalWrite(SWITCH8, HIGH);
+        digitalWrite(BMF, HIGH);
       } else {
-        digitalWrite(SWITCH8, LOW);
+        digitalWrite(BMF, LOW);
       }
       if (switchArray[9] == '0') {
-        digitalWrite(SWITCH9, HIGH);
+        digitalWrite(PECKER, HIGH);
       } else {
-        digitalWrite(SWITCH9, LOW);
+        digitalWrite(PECKER, LOW);
       }
       if (switchArray[10] == '0') {
-        digitalWrite(SWITCH10, HIGH);
+        digitalWrite(ROOFDECK, HIGH);
       } else {
-        digitalWrite(SWITCH10, LOW);
+        digitalWrite(ROOFDECK, LOW);
       }
       
     } else {
